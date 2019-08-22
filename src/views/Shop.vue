@@ -1,6 +1,5 @@
 <template>
   <div id="app" class="container">
-    <AddBook v-on:add-book="addBook"/>
     <BooksList v-bind:books="books" v-on:del-book="deleteBook"/>
   </div>
 </template>
@@ -9,6 +8,7 @@
   import AddBook from "../components/AddBook";
   import BooksList from "../components/BooksList";
   import axios from "axios";
+  import data from '../data.json'
 
   export default {
     name: "Shop",
@@ -18,8 +18,7 @@
     },
     data() {
       return {
-        /*TODO: take data about books from the server*/
-        books: []
+        books: data
       };
     },
     methods: {
@@ -31,24 +30,16 @@
           })
           .catch(err => console.log(err))
 
-
       },
-      addBook(newBook) {
+      addBookToCart(newBook) {
         const { title, completed } = newBook;
 
-        axios.post("https://jsonplaceholder.typicode.com/todos", {
-          title,
-          completed
-        })
-        //add new book to array
-          .then(res => this.books = [...this.books, res.data]) //return back todo with the id
-          .catch(err => console.log(err));
       }
     },
     created() {
-      // axios.get("https://jsonplaceholder.typicode.com/todos?_limit=7")
-      //   .then(res => this.books = res.data)
-      //   .catch(err => console.log(err));
+      //TODO: Выглядит странно. Спросить!
+      // this.books = JSON.parse(JSON.stringify(data));
+      // console.log(this.books);
     }
   };
 </script>

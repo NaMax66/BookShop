@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form class="row m-1" @submit="addBook">
+    <form class="row m-1" @submit="addBookToCart">
       <input class="col-10" type="text" v-model="title" name="title" placeholder="Add Book..." required>
       <input class="col-2 btn btn-dark" type="submit" value="Add">
     </form>
@@ -16,9 +16,10 @@
       }
     },
     methods: {
-      addBook(e) {
+      addBookToCart(e) {
         e.preventDefault();
         const newBook = {
+          /*Add to localStorage then to Cart*/
 
           title: this.title,
           completed: false

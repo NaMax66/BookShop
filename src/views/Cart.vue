@@ -3,3 +3,8 @@
     <h1>This is the shop cart</h1>
   </div>
 </template>
+
+<script>
+  //take data from cart
+</script>
+

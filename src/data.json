@@ -1,4 +1,5 @@
-[{"id":"g98bscabcjzmgf3le","img":"Abelson_Harold.jpg","title":"Структура и Интерпретация Компьютерных Программ","price":"1271"},
+[
+  {"id":"g98bscabcjzmgf3le","img":"Abelson_Harold.jpg","title":"Структура и Интерпретация Компьютерных Программ","price":"1271"},
   {"id":"g98bscabcjzmgf3lf","img":"Alan_Turing.jpg","title":"Вычислительные машины и разум","price":"130"},
   {"id":"g98bscabcjzmgf3lg","img":"Althoff_Kori.jpg","title":"Сам себе программист. Как научиться программировать и устроиться в Ebay?","price":"485"},
   {"id":"g98bscabcjzmgf3lh","img":"Berry_Paul.jpg","title":"Изучаем программирование на Python","price":"1023"},
@@ -27,4 +28,5 @@
   {"id":"g98bscabcjzmgf3m4","img":"Troelsen_Andrew.jpg","title":"Язык программирования C# 7 и платформы .NET и .NET Core","price":"3102"},
   {"id":"g98bscabcjzmgf3m5","img":"Vasilyev_Alexey.jpg","title":"Программирование на Java для начинающих","price":"631"},
   {"id":"g98bscabcjzmgf3m6","img":"Vasilyev_Alexey_1.jpg","title":"Программирование на C++ в примерах и задачах","price":"477"},
-  {"id":"g98bscabcjzmgf3m7","img":"Vorderman_Carol.jpg","title":"Программирование для детей","price":"1120"}]
+  {"id":"g98bscabcjzmgf3m7","img":"Vorderman_Carol.jpg","title":"Программирование для детей","price":"1120"}
+]
