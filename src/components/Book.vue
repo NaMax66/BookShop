@@ -10,6 +10,8 @@
         <!--todo подумать над кнопками-->
         <div class="btn-group ml-3" role="group" aria-label="Basic example">
           <button type="button" class="btn btn-secondary"> -</button>
+          <!--добавить динамическое обновление из корзины-->
+          <button type="button" class="btn disabled">{{book.amount ? 1:0}}</button>
           <button type="button" class="btn btn-secondary"> +</button>
         </div>
       </div>
@@ -23,19 +25,11 @@
     props: ["book"],
     methods: {
       addBookToCart(){
-        const checkLocalStorage = () => {
-          console.log(localStorage);
-          return true
-        };
-        let cartBook = this.book;
-        cartBook.date = new Date().getTime();
-        if (checkLocalStorage(cartBook)){
-          localStorage.setItem(cartBook.id, JSON.stringify(cartBook))
-          //если книги нет - добавить
-        } else {
-          //обновить данные
-        }
-        console.log(cartBook);
+        //создеём новый объект для карзины
+        const newBook = 'new book';
+
+        //добавляем в карзину
+        this.$emit('add-book-to-cart', newBook);
       }
     }
   };

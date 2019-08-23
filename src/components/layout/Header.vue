@@ -2,6 +2,7 @@
   <header class="header">
     <h1>BookShop</h1>
     <div id="nav">
+      <!--todo: добавить счетчик-->
       <router-link to="/">Shop</router-link> |
       <router-link to="cart">Cart</router-link>
     </div>
@@ -16,6 +17,7 @@
 </script>
 
 <style>
+  /*todo: прикрутить бутстрап и убрать CSS*/
   .header {
     background: #333;
     color: #fff;
