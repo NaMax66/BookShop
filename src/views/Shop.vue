@@ -1,72 +1,30 @@
 <template>
-  <div id="app" class="container">
-    <BooksList v-bind:books="books" v-on:del-book="deleteBook"/>
+  <div class="container">
+    <div class="row">
+      <!--todo Максимальная ширина-->
+      <div class="col-lg-6" v-bind:key="book.id" v-for="book in data.books">
+        <Book v-bind:book="book" v-on:add-book-to-cart="addBookToCart"/>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-  import AddBook from "../components/AddBook";
-  import BooksList from "../components/BooksList";
-  import data from '../data.json'
+  import Book from "../components/Book";
 
   export default {
     name: "Shop",
     components: {
-      BooksList,
-      AddBook
+      Book
     },
-    data() {
-      return {
-        //берем данные из src/data.json
-        books: data,
-        booksInCart: []
-      };
-    },
+
+    props: ["data"],
     methods: {
       addBookToCart(newBook) {
-        //добавляем книгу и обновляем хранилище
-        this.booksInCart.push(newBook);
-        this.updateLocalStorage();
-      },
-
-      updateCart(id, time, amount) {
-        const book = this.booksInCart[id];
-        if (book.amount === 0)
-        book.time = time;
-        book.amount = amount;
-        this.booksInCart.push(book);
-      },
-
-      deleteBookFromCart(id) {
-        //отфильтровываем книгу с переданным id из массива с книгами в корзине
-        this.booksInCart = this.booksInCart.filter(book => book.id !== id);
-      },
-
-      clearCart() {
-        this.booksInCart = [];
-        this.updateLocalStorage();
-      },
-
-      calcTotalAmount() {
-        return this.booksInCart.reduce((sum, book) =>{
-          return sum += book.amount;
-        })
-      },
-      updateLocalStorage(){
-        localStorage.BookShopCart = this.booksInCart;
+        //TODO: узнать - есть ли способ короче?
+        this.$emit("add-book-to-cart", newBook);
       }
-    },
-    created() {
-      //получаем данные из локального хранилища
-      if (localStorage.BookShopCart) this.booksInCart = localStorage.BookShopCart;
-      //превращаем колличество в число
-      this.booksInCart.forEach(el =>{
-        el.amount = parseInt(el.amount, 10);
-      })
-
-      //TODO: Выглядит странно. Спросить!
-      // this.books = JSON.parse(JSON.stringify(data));
-      // console.log(this.books);
     }
+
   };
 </script>

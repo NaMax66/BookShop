@@ -1,20 +1,21 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Shop from './views/Shop.vue'
+import Cart from "./views/Cart";
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   routes: [
     {
       path: '/',
       name: 'shop',
-      component: Shop
+      component: Shop, props: true
     },
     {
       path: '/cart',
       name: 'cart',
-      component: () => import('./views/Cart.vue')
+      component: Cart, props: true
     }
   ]
 })
