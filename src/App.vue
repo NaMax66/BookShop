@@ -1,41 +1,47 @@
 <template>
   <div id="app" class="container">
-    <Header />
-    <router-view :data="data" v-on:add-book-to-cart="addBookToCart"
-                              v-on:change-cart-book-amount="changeAmount"
-
-
+    <Header v-bind:totalAmountBooksInCart="totalAmountBooksInCart()"/>
+    <router-view :data="data" v-bind:totalAmountBooksInCart="totalAmountBooksInCart()"
+                 v-on:add-book-to-cart="addBookToCart"
+                 v-on:change-cart-book-amount="changeAmount"
+                 v-on:delete-book-from-cart="deleteBookFromCart"
+                 v-on:clear-cart="clearCart"
     />
   </div>
 </template>
 
 <script>
   import Header from "./components/layout/Header";
-  import data from "./data.json";
+  import book_database from "./book_database.json";
+
   export default {
-    name: 'app',
+    name: "app",
     components: {
       Header
     },
     data() {
-      return{
+      return {
         data: {
-          //берем данные из data.json
-          books: data,
+          //берем данные из book_database.json
+          books: book_database,
           booksInCart: []
         }
-      }
+      };
     },
     methods: {
-
+      //todo сделать нормлаьные аргументы
       changeAmount(numId) {
-        const id = numId[0];
+        const id = numId[1];
         //обнавляем данные в карзине
-        console.log(this.data.booksInCart);
-        //this.data.booksInCart[id].amount = numId[1];
+        this.data.booksInCart.forEach(el => {
+          if (el.id === id) {
+            el.amount = numId[0];
+
+          }
+        });
         this.updateLocalStorage();
       },
-      
+
       addBookToCart(newBook) {
         //проверяем есть ли книга
         let isInCart = false;
@@ -48,19 +54,12 @@
             isInCart = true;
           }
         });
-        if (isInCart) return;
-        //добавляем книгу и обновляем хранилище
-        this.data.booksInCart = [...this.data.booksInCart, newBook];
-        console.log(this.booksInCart);
-        this.updateLocalStorage();
-      },
+        //если книги небыло в карзине - добавляем новую
+        if (!isInCart) this.data.booksInCart = [...this.data.booksInCart, newBook];
 
-      updateCart(id, time, amount) {
-        const book = this.data.booksInCart[id];
-        if (book.amount === 0)
-          book.time = time;
-        book.amount = amount;
-        this.data.booksInCart.push(book);
+        //обновляем хранилище с сортируем книги в карзине
+        this.sortCartByTime();
+        this.updateLocalStorage();
       },
 
       deleteBookFromCart(id) {
@@ -69,35 +68,34 @@
       },
 
       clearCart() {
-        this.data.booksInCart = [];
-        this.updateLocalStorage();
+        if (confirm("Убрать все книги из карзины?")) {
+          this.data.booksInCart = [];
+          this.updateLocalStorage();
+        }
+      },
+      totalAmountBooksInCart(){
+        return this.data.booksInCart.reduce((sum, bookInCart) => {
+          return sum + bookInCart.amount;
+        }, 0)
       },
 
-      calcTotalAmount() {
-        return this.data.booksInCart.reduce((sum, book) => {
-          sum += book.amount;
-          return sum ;
-        });
-      },
       updateLocalStorage() {
         localStorage.BookShopCart = JSON.stringify(this.data.booksInCart);
+      },
+
+      //сортировка списка для отображения вновь добавленных книг в карзину вверху
+      sortCartByTime() {
+        this.data.booksInCart.sort((book1, book2) => {
+          return book2.time - book1.time;
+        });
       }
     },
     created() {
       //получаем данные из локального хранилища
       if (localStorage.BookShopCart) {
         this.data.booksInCart = JSON.parse(localStorage.BookShopCart);
-
-        if (this.data.booksInCart.length === 0) return;
-        //превращаем колличество в число
-        // this.booksInCart.forEach(el => {
-        //   el.amount = parseInt(el.amount, 10);
-        // });
       }
-      //TODO: Выглядит странно. Спросить!
-      // this.books = JSON.parse(JSON.stringify(data));
-      // console.log(this.books);
     }
-
-  }
+  };
 </script>
+
