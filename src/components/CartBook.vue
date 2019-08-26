@@ -27,7 +27,7 @@
     methods: {
       /*если 0 - убираем*/
       changeAmount(addAmount) {
-        //отправляем данные в App. Вся работа с данными происходит там
+        //отправляем новое кол-во в App. Все изменения структуры данных происходят там
         this.$emit("change-cart-book-amount", {
           amount: this.bookInCart.amount + addAmount,
           id: this.bookInCart.id

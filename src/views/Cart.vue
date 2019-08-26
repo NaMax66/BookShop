@@ -1,9 +1,5 @@
 <template>
-  <div class="container">
-    <div>
-      <ul>
-      </ul>
-    </div>
+  <div class="container pt-5">
     <div class="row">
       <div class="col-10" v-bind:key="bookInCart.id" v-for="bookInCart in data.booksInCart">
         <!--передаем событие родителю-->

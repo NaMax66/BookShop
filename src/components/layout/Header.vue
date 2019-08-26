@@ -1,19 +1,20 @@
 <template>
-  <header id="nav" class="navbar rounded-bottom fixed-top">
-    <router-link to="/">
-      <h1 class="navbar-brand ml-4 text-white">BookShop</h1>
-    </router-link>
-    <ul class="nav">
-      <li class="nav-item">
-        <router-link class="nav-link text-white font-weight-bold" to="/">Магазин</router-link>
-      </li>
-      <li class="nav-item">
-        <!--todo сдвинуть все к центру-->
-        <router-link class="nav-link text-white font-weight-bold" to="cart">
+  <header id="nav" class="navbar fixed-top">
+    <div class="container">
+      <router-link to="/">
+        <h1 class="navbar-brand text-white">BookShop</h1>
+      </router-link>
+      <div class="navbar">
+        <router-link class="nav-item nav-link text-white font-weight-bold" to="/">Магазин</router-link>
+
+        <!--Добавляем бордер на кнопку Корзина, если общее кол-во не 0-->
+        <router-link class="nav-item nav-link text-white font-weight-bold"
+                     v-bind:class="{'btn border':totalAmountBooksInCart}" to="cart">
           Корзина <span class=" badge badge-light">{{totalAmountBooksInCart}}</span>
         </router-link>
-      </li>
-    </ul>
+      </div>
+    </div>
+
   </header>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container pt-5">
     <div class="row">
       <div class="col-lg-6" v-bind:key="book.id" v-for="book in data.books">
         <!--передаем в компонент Book объект из массива books и кол-во данной копии книги в карзине-->

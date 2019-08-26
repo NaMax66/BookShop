@@ -12,26 +12,25 @@
 
 <script>
   import Header from "./components/layout/Header";
-  //import book_database from "./book_database.json";
-  import axios from 'axios'
+  import axios from "axios";
 
   export default {
     name: "app",
+
     components: {
       Header
     },
+
     data() {
       return {
         data: {
-          //todo запросы с сервера
-          //берем данные из заглушки book_database.json
           books: [],
           booksInCart: []
         }
       };
     },
+
     methods: {
-      //todo сделать нормлаьные аргументы
       changeAmount(dataBook) {
         if (dataBook.amount === 0)
           this.deleteBookFromCart(dataBook.id);
@@ -45,27 +44,26 @@
         });
         this.updateLocalStorage();
       },
+
       addBookToCart(newBook) {
         //проверяем есть ли книга
-        let isInCart = false;
 
         this.data.booksInCart.forEach(el => {
-          //смотрим все книги, и если есть с существующим id - обновляем кол-во и время добавления, чтобы подвинуть вновь добавленную книгу вверх
 
+          //смотрим все книги в карзине и если есть с существующим id - обновляем кол-во
           if (el.id === newBook.id) {
-            el.amount += 1;
-            el.time = newBook.time;
+            newBook.amount = el.amount + 1;
+
+            //удаляем книгу со старым кол-вом
+            this.deleteBookFromCart(newBook.id);
             this.updateLocalStorage();
-            isInCart = true;
           }
         });
 
-        //если книги небыло в карзине - добавляем новую
-        if (!isInCart)
-          this.data.booksInCart = [...this.data.booksInCart, newBook];
+        //Добавляем новую книгу в карзину
+        this.data.booksInCart = [newBook, ...this.data.booksInCart];
 
         //обновляем хранилище с сортируем книги в карзине
-        this.sortCartByTime();
         this.updateLocalStorage();
       },
 
@@ -80,6 +78,7 @@
           this.updateLocalStorage();
         }
       },
+
       totalAmountBooksInCart() {
         return this.data.booksInCart.reduce((sum, bookInCart) => {
           return sum + bookInCart.amount;
@@ -89,22 +88,15 @@
       updateLocalStorage() {
         localStorage.BookShopCart = JSON.stringify(this.data.booksInCart);
       },
-
-      //сортировка списка для отображения вновь добавленных книг в карзину вверху
-      sortCartByTime() {
-        //todo убрать время нахрен
-        this.data.booksInCart.sort((book1, book2) => {
-          return book2.time - book1.time;
-        });
-      }
     },
+
     created() {
-      let proxy = 'https://cors-anywhere.herokuapp.com/';
+      //TODO сделать запросы без прокси
+      let proxy = "https://cors-anywhere.herokuapp.com/";
       //получаем данные с сервера
-      axios.get(proxy + 'https://www.book-shop.na4u.ru/book_database')
-        .then(res =>  {
-          console.log(res.data);
-          this.data.books = res.data
+      axios.get(proxy + "https://www.book-shop.na4u.ru/book_database")
+        .then(res => {
+          this.data.books = res.data;
         })
         .catch(err => console.log(err));
 
