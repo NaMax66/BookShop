@@ -1,11 +1,17 @@
 <template>
-  <div class="card-body">
+  <div class="card-body pt-3 border-top">
     <h5 class="card-title">{{ book.title }}</h5>
     <div class="row">
-      <img class="col-4" :src="require('../img/' + book.img)" v-bind:alt="book.price"/>
+      <div class="p-0 col-4">
+        <img class="w-100" :src="require('../img/' + book.img)" v-bind:alt="book.price"/>
+      </div>
       <div class="col-8">
         <p class="lead">Цена: <span class="font-weight-bold">{{ book.price }}</span> руб.</p>
-        <button @click="addBookToCart" class="btn btn-info">{{btnTxt}}</button>
+        <!--todo информатор снизу-->
+        <!--todo выделить кнопку не пустую карзину-->
+
+        <!--todo сделать добавить плюс минус и кнопку сделать в корзину-->
+        <button @click="addBookToCart" class="btn btn-info">{{checkBtnTxt()}}</button>
       </div>
     </div>
   </div>
@@ -13,21 +19,15 @@
 
 <script>
   export default {
-    data() {
-      return {
-        //текст для кнопки, он меняется если в корзине уже есть эта книга
-        btnTxt: "В корзину"
-      };
-    },
     name: "Book",
-    props: ["book", "bookInCAmount"],
+    props: ["book", "bookInCartAmount"],
     methods: {
       addBookToCart() {
         //проверяем - есть ли эта книга в карзине
         this.checkBtnTxt();
 
         //создеём новый объект для карзины
-        const newBook = JSON.parse(JSON.stringify(this.book));
+        const newBook = Object.assign({}, this.book);
         newBook.time = new Date().getTime();
         //проверка на колличество в карзине делается в методе addBookToCart в корневом элементе
         newBook.amount = 1;
@@ -35,11 +35,10 @@
         this.$emit("add-book-to-cart", newBook);
       },
       checkBtnTxt() {
-        if (this.bookInCAmount >= 0) this.btnTxt = "Добавить + 1";
-        else this.btnTxt = "В корзину";
+        if (this.bookInCartAmount > 0) return "Добавить + 1";
+        else return "В корзину";
       }
     }
   };
 
 </script>
-

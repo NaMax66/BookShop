@@ -1,14 +1,18 @@
 <template>
-  <header id="nav" class="navbar rounded-bottom">
-    <h1 class="navbar-brand ml-4">BookShop</h1>
+  <header id="nav" class="navbar rounded-bottom fixed-top">
+    <router-link to="/">
+      <h1 class="navbar-brand ml-4 text-white">BookShop</h1>
+    </router-link>
     <ul class="nav">
       <li class="nav-item">
         <router-link class="nav-link text-white font-weight-bold" to="/">Магазин</router-link>
       </li>
       <li class="nav-item">
-        <router-link class="nav-link text-white font-weight-bold" to="cart">Корзина</router-link>
+        <!--todo сдвинуть все к центру-->
+        <router-link class="nav-link text-white font-weight-bold" to="cart">
+          Корзина <span class=" badge badge-light">{{totalAmountBooksInCart}}</span>
+        </router-link>
       </li>
-      <li class="badge-light rounded p-1 pt-2 font-weight-bold">{{totalAmountBooksInCart}} шт</li>
     </ul>
   </header>
 </template>
@@ -22,7 +26,6 @@
 </script>
 
 <style>
-  /*todo: прикрутить бутстрап и убрать CSS*/
   .navbar {
     background-color: #333;
     color: #fff;

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container">
+  <div id="app" class="container mt-5">
     <Header v-bind:totalAmountBooksInCart="totalAmountBooksInCart()"/>
     <router-view :data="data" v-bind:totalAmountBooksInCart="totalAmountBooksInCart()"
                  v-on:add-book-to-cart="addBookToCart"
@@ -12,7 +12,8 @@
 
 <script>
   import Header from "./components/layout/Header";
-  import book_database from "./book_database.json";
+  //import book_database from "./book_database.json";
+  import axios from 'axios'
 
   export default {
     name: "app",
@@ -22,31 +23,35 @@
     data() {
       return {
         data: {
-          //берем данные из book_database.json
-          books: book_database,
+          //todo запросы с сервера
+          //берем данные из заглушки book_database.json
+          books: [],
           booksInCart: []
         }
       };
     },
     methods: {
       //todo сделать нормлаьные аргументы
-      changeAmount(numId) {
-        const id = numId[1];
+      changeAmount(dataBook) {
+        if (dataBook.amount === 0)
+          this.deleteBookFromCart(dataBook.id);
+
+        const id = dataBook.id;
         //обнавляем данные в карзине
         this.data.booksInCart.forEach(el => {
           if (el.id === id) {
-            el.amount = numId[0];
-
+            el.amount = dataBook.amount;
           }
         });
         this.updateLocalStorage();
       },
-
       addBookToCart(newBook) {
         //проверяем есть ли книга
         let isInCart = false;
+
         this.data.booksInCart.forEach(el => {
           //смотрим все книги, и если есть с существующим id - обновляем кол-во и время добавления, чтобы подвинуть вновь добавленную книгу вверх
+
           if (el.id === newBook.id) {
             el.amount += 1;
             el.time = newBook.time;
@@ -54,8 +59,10 @@
             isInCart = true;
           }
         });
+
         //если книги небыло в карзине - добавляем новую
-        if (!isInCart) this.data.booksInCart = [...this.data.booksInCart, newBook];
+        if (!isInCart)
+          this.data.booksInCart = [...this.data.booksInCart, newBook];
 
         //обновляем хранилище с сортируем книги в карзине
         this.sortCartByTime();
@@ -63,8 +70,8 @@
       },
 
       deleteBookFromCart(id) {
-        //отфильтровываем книгу с переданным id из массива с книгами в корзине
         this.data.booksInCart = this.data.booksInCart.filter(book => book.id !== id);
+        this.updateLocalStorage();
       },
 
       clearCart() {
@@ -73,10 +80,10 @@
           this.updateLocalStorage();
         }
       },
-      totalAmountBooksInCart(){
+      totalAmountBooksInCart() {
         return this.data.booksInCart.reduce((sum, bookInCart) => {
           return sum + bookInCart.amount;
-        }, 0)
+        }, 0);
       },
 
       updateLocalStorage() {
@@ -85,12 +92,22 @@
 
       //сортировка списка для отображения вновь добавленных книг в карзину вверху
       sortCartByTime() {
+        //todo убрать время нахрен
         this.data.booksInCart.sort((book1, book2) => {
           return book2.time - book1.time;
         });
       }
     },
     created() {
+      let proxy = 'https://cors-anywhere.herokuapp.com/';
+      //получаем данные с сервера
+      axios.get(proxy + 'https://www.book-shop.na4u.ru/book_database')
+        .then(res =>  {
+          console.log(res.data);
+          this.data.books = res.data
+        })
+        .catch(err => console.log(err));
+
       //получаем данные из локального хранилища
       if (localStorage.BookShopCart) {
         this.data.booksInCart = JSON.parse(localStorage.BookShopCart);
@@ -98,4 +115,13 @@
     }
   };
 </script>
+
+<style>
+  /*уменьшаем размер шрифта с 16 до 12px для маленьких экранов*/
+  @media (max-width: 640px) {
+    html {
+      font-size: 75%;
+    }
+  }
+</style>
 

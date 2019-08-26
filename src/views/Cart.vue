@@ -5,16 +5,15 @@
       </ul>
     </div>
     <div class="row">
-      <div class="col-10" v-bind:key="bookInC.id" v-for="bookInC in data.booksInCart">
+      <div class="col-10" v-bind:key="bookInCart.id" v-for="bookInCart in data.booksInCart">
         <!--передаем событие родителю-->
-        <CartBook v-bind:bookInC="bookInC" v-on:change-cart-book-amount="changeAmount"
+        <CartBook v-bind:bookInCart="bookInCart" v-on:change-cart-book-amount="changeAmount"
                   v-on:delete-book-from-cart="deleteBookFromCart"/>
       </div>
     </div>
     <div class="d-flex justify-content-between mb-4 mt-2">
       <button @click="$emit('clear-cart')" class="btn btn-danger ml-4">Удалить всё</button>
-      <!--todo: сделать тчтобы общее кол-во оставалось на экране всегда-->
-      <h3>Итого книг: {{totalAmountBooksInCart}} шт.</h3>
+      <h3>Итого книг: {{totalAmountBooksInCart}} шт</h3>
     </div>
   </div>
 </template>
@@ -45,4 +44,9 @@
     }
   };
 </script>
+
+<style>
+
+</style>
+
 
