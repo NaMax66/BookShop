@@ -7,10 +7,10 @@
       </div>
       <div class="col-8">
         <p class="lead">Цена: <span class="font-weight-bold">{{ book.price }}</span> руб.</p>
-        <!--todo информатор снизу-->
 
-        <!--todo сделать добавить плюс минус и кнопку сделать в корзину-->
-        <button @click="addBookToCart" class="btn btn-info">{{checkBtnTxt()}}</button>
+        <b-button @click="addBookToCart" class="btn btn-info">В корзину</b-button>
+        <!--добавляем всплывающее сообщение рядом с кнопкой "В корзину"-->
+        <b-toast class="mt-3" v-bind:id="'toast' + this.book.id" v-bind:title="`В корзине ${bookInCartAmount} шт.` " auto-hide-delay="5000" static>{{this.book.title}}</b-toast>
       </div>
     </div>
   </div>
@@ -19,27 +19,25 @@
 <script>
   export default {
     name: "Book",
+
     props: ["book", "bookInCartAmount"],
+
     methods: {
       addBookToCart() {
-        //проверяем - есть ли эта книга в карзине
-        this.checkBtnTxt();
-
-        //создеём новый объект для карзины
+        //создаем новый объект для корзины
         const newBook = Object.assign({}, this.book);
 
-        //проверка на колличество в карзине делается в методе addBookToCart в корневом элементе
+        //проверка на количество в корзине делается в методе addBookToCart в корневом элементе
         newBook.amount = 1;
-        //добавляем в карзину
+        //добавляем в корзину
         this.$emit("add-book-to-cart", newBook);
-
+        //делаем сообщение видимым
+        this.makeToast()
       },
-      checkBtnTxt() {
-        //TODO сделать уведомление о добавлении новой книги
-        if (this.bookInCartAmount > 0) return "Добавить + 1";
-        else return "В корзину";
+
+      makeToast() {
+        this.$bvToast.show(`toast${this.book.id}`)
       }
     }
   };
-
 </script>

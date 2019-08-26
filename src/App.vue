@@ -36,7 +36,7 @@
           this.deleteBookFromCart(dataBook.id);
 
         const id = dataBook.id;
-        //обнавляем данные в карзине
+        //обновляем данные в корзине
         this.data.booksInCart.forEach(el => {
           if (el.id === id) {
             el.amount = dataBook.amount;
@@ -46,11 +46,10 @@
       },
 
       addBookToCart(newBook) {
-        //проверяем есть ли книга
-
+        //проверяем есть ли книга в корзине
         this.data.booksInCart.forEach(el => {
 
-          //смотрим все книги в карзине и если есть с существующим id - обновляем кол-во
+          //смотрим все книги в корзине и если есть с существующим id - обновляем кол-во
           if (el.id === newBook.id) {
             newBook.amount = el.amount + 1;
 
@@ -60,10 +59,10 @@
           }
         });
 
-        //Добавляем новую книгу в карзину
+        //Добавляем новую книгу в корзину
         this.data.booksInCart = [newBook, ...this.data.booksInCart];
 
-        //обновляем хранилище с сортируем книги в карзине
+        //обновляем хранилище с сортируем книги в корзине
         this.updateLocalStorage();
       },
 
@@ -73,7 +72,7 @@
       },
 
       clearCart() {
-        if (confirm("Убрать все книги из карзины?")) {
+        if (confirm("Убрать все книги из корзины?")) {
           this.data.booksInCart = [];
           this.updateLocalStorage();
         }
@@ -91,10 +90,8 @@
     },
 
     created() {
-      //TODO сделать запросы без прокси
-      let proxy = "https://cors-anywhere.herokuapp.com/";
       //получаем данные с сервера
-      axios.get(proxy + "https://www.book-shop.na4u.ru/book_database")
+      axios.get("/book_database")
         .then(res => {
           this.data.books = res.data;
         })

@@ -13,7 +13,7 @@
           <span class="btn disabled">  {{bookInCart.amount}}  </span>
           <button @click="changeAmount(1)" type="button" class="btn btn-secondary"> +</button>
         </div>
-        <!--передаем событие для удаления книги из карзины вместе с id в App.vue-->
+        <!--передаем событие для удаления книги из корзины вместе с id в App.vue-->
         <button @click="$emit('delete-book-from-cart', bookInCart.id)" class="btn btn-warning mt-2 mr-1">Убрать</button>
       </div>
     </div>
@@ -25,7 +25,6 @@
     name: "CartBook",
     props: ["bookInCart"],
     methods: {
-      /*если 0 - убираем*/
       changeAmount(addAmount) {
         //отправляем новое кол-во в App. Все изменения структуры данных происходят там
         this.$emit("change-cart-book-amount", {

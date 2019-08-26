@@ -2,7 +2,8 @@
   <div class="container pt-5">
     <div class="row">
       <div class="col-lg-6" v-bind:key="book.id" v-for="book in data.books">
-        <!--передаем в компонент Book объект из массива books и кол-во данной копии книги в карзине-->
+
+        <!--передаем в компонент Book объект из массива books и кол-во данной копии книги в корзине-->
         <Book v-bind:book="book"
               v-bind:bookInCartAmount="getBookInCartAmount(book.id)"
               v-on:add-book-to-cart="addBookToCart"/>
