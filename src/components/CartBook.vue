@@ -3,7 +3,7 @@
 
     <div class="row">
       <div class="col-2 p-0">
-        <img class="w-100" :src="require('../img/' + bookInCart.img)" v-bind:alt="bookInCart.price"/>
+        <img class="w-100" :src="require('../img/' + bookInCart.img)" :alt="bookInCart.price"/>
       </div>
       <p class="card-title col-6">{{bookInCart.title}}</p>
       <div class="col-4 text-right">

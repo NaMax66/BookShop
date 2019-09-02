@@ -9,7 +9,7 @@
 
         <!--Добавляем бордер на кнопку Корзина, если общее кол-во не 0-->
         <router-link class="nav-item nav-link text-white font-weight-bold btn"
-                     v-bind:class="{'border-light':totalAmountBooksInCart}" to="cart">
+                     :class="{'border-light':totalAmountBooksInCart}" to="cart">
           Корзина <span class=" badge badge-light">{{totalAmountBooksInCart}}</span>
         </router-link>
       </div>

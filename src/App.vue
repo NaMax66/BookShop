@@ -1,11 +1,11 @@
 <template>
   <div id="app" class="container mt-5">
-    <Header v-bind:totalAmountBooksInCart="totalAmountBooksInCart()"/>
-    <router-view :data="data" v-bind:totalAmountBooksInCart="totalAmountBooksInCart()"
-                 v-on:add-book-to-cart="addBookToCart"
-                 v-on:change-cart-book-amount="changeAmount"
-                 v-on:delete-book-from-cart="deleteBookFromCart"
-                 v-on:clear-cart="clearCart"
+    <Header :totalAmountBooksInCart="totalAmountBooksInCart"/>
+    <router-view :data="data" :totalAmountBooksInCart="totalAmountBooksInCart"
+                 @add-book-to-cart="addBookToCart"
+                 @change-cart-book-amount="changeAmount"
+                 @delete-book-from-cart="deleteBookFromCart"
+                 @clear-cart="clearCart"
     />
   </div>
 </template>
@@ -28,6 +28,14 @@
           booksInCart: []
         }
       };
+    },
+
+    computed: {
+      totalAmountBooksInCart() {
+        return this.data.booksInCart.reduce((sum, bookInCart) => {
+          return sum + bookInCart.amount;
+        }, 0);
+      }
     },
 
     methods: {
@@ -78,11 +86,7 @@
         }
       },
 
-      totalAmountBooksInCart() {
-        return this.data.booksInCart.reduce((sum, bookInCart) => {
-          return sum + bookInCart.amount;
-        }, 0);
-      },
+
 
       updateLocalStorage() {
         localStorage.BookShopCart = JSON.stringify(this.data.booksInCart);
