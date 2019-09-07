@@ -1,9 +1,8 @@
 <template>
   <div class="card-body">
-
     <div class="row">
       <div class="col-2 p-0">
-        <img class="w-100" :src="require('../img/' + bookInCart.img)" :alt="bookInCart.price"/>
+        <img class="w-100" :src="require('../img/' + bookInCart.img)" :alt="bookInCart.title"/>
       </div>
       <p class="card-title col-6">{{bookInCart.title}}</p>
       <div class="col-4 text-right">
@@ -26,7 +25,7 @@
     props: ["bookInCart"],
     methods: {
       changeAmount(addAmount) {
-        //отправляем новое кол-во в App. Все изменения структуры данных происходят там
+        //отправляем новое кол-во в App. Все изменения данных происходят там
         this.$emit("change-cart-book-amount", {
           amount: this.bookInCart.amount + addAmount,
           id: this.bookInCart.id

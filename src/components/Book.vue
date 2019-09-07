@@ -6,7 +6,8 @@
         <img class="w-100" :src="require('../img/' + book.img)" :alt="book.price"/>
       </div>
       <div class="col-8">
-        <p class="lead">Цена: <span class="font-weight-bold">{{ book.price }}</span> руб.</p>
+        <!--округляем представление стоимости книги-->
+        <p class="lead">Цена: <span class="font-weight-bold">{{ Math.round(book.price * 100) / 100 }}</span> руб.</p>
         <b-button @click="addBookToCart" class="btn btn-info">В корзину</b-button>
 
         <!--добавляем всплывающее сообщение рядом с кнопкой "В корзину"-->

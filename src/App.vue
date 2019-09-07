@@ -86,8 +86,6 @@
         }
       },
 
-
-
       updateLocalStorage() {
         localStorage.BookShopCart = JSON.stringify(this.data.booksInCart);
       },
@@ -111,7 +109,7 @@
 
 <style>
   /*уменьшаем размер шрифта с 16 до 12px для маленьких экранов*/
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     html {
       font-size: 75%;
     }

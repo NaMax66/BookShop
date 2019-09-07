@@ -9,7 +9,7 @@
     </div>
     <div class="d-flex justify-content-between mb-4 mt-2">
       <button @click="$emit('clear-cart')" class="btn btn-danger">Удалить всё</button>
-      <h3>Итого книг: {{totalAmountBooksInCart}} шт</h3>
+      <h3>Общая сумма заказа: {{totalPrice}}</h3>
     </div>
   </div>
 </template>
@@ -22,7 +22,20 @@
     components: {
       CartBook
     },
-    props: ["data", "totalAmountBooksInCart"],
+    props: ["data"],
+
+    computed: {
+      totalPrice(){
+        let totalSum = 0;
+        
+        this.data.booksInCart.forEach(el => {
+          totalSum += el.price * el.amount;
+        });
+
+        //округляем до сотых долей
+        return Math.round(totalSum * 100)/100 + ' ₽';
+      }
+    },
 
     methods: {
       changeAmount(numId) {
