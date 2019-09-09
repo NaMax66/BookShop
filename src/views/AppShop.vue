@@ -3,24 +3,27 @@
     <div class="row">
       <div class="col-lg-6" :key="book.id" v-for="book in data.books">
 
-        <!--передаем в компонент Book объект из массива books и кол-во данной копии книги в корзине-->
-        <Book :book="book"
+        <!--передаем в компонент ShopBook объект из массива books и кол-во данной копии книги в корзине-->
+        <ShopBook :book="book"
               :bookInCartAmount="getBookInCartAmount(book.id)"
-              @add-book-to-cart="addBookToCart"/>
+              @add-book-to-cart="addBookToCart"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import Book from "../components/Book";
+  import ShopBook from "../components/ShopBook";
 
   export default {
     name: "Shop",
     components: {
-      Book
+      ShopBook: ShopBook
     },
-    props: ["data"],
+    props: {
+      data: Object
+    },
     methods: {
       addBookToCart(newBook) {
         this.$emit("add-book-to-cart", newBook);

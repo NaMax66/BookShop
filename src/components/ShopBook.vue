@@ -3,7 +3,7 @@
     <h5 class="card-title">{{ book.title }}</h5>
     <div class="row">
       <div class="p-0 col-4">
-        <img class="w-100" :src="require('../img/' + book.img)" :alt="book.price"/>
+        <img class="w-100" :src="require('../img/' + book.img)" :alt="book.title"/>
       </div>
       <div class="col-8">
         <!--округляем представление стоимости книги-->
@@ -22,7 +22,10 @@
   export default {
     name: "Book",
 
-    props: ["book", "bookInCartAmount"],
+    props: {
+      book: Object,
+      bookInCartAmount: Number
+    },
 
     methods: {
       addBookToCart() {
@@ -33,7 +36,7 @@
         newBook.amount = 1;
         //добавляем в корзину
         this.$emit("add-book-to-cart", newBook);
-        //делаем сообщение видимым
+        //показываем сообщение о добавлении книги в корзину
         this.makeToast()
       },
 
@@ -43,3 +46,4 @@
     }
   };
 </script>
+

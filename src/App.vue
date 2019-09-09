@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="container mt-5">
-    <Header :totalAmountBooksInCart="totalAmountBooksInCart"/>
-    <router-view :data="data" :totalAmountBooksInCart="totalAmountBooksInCart"
+    <AppHeader :totalAmountBooksInCart="totalAmountBooksInCart"/>
+    <router-view :data="data"
                  @add-book-to-cart="addBookToCart"
                  @change-cart-book-amount="changeAmount"
                  @delete-book-from-cart="deleteBookFromCart"
@@ -11,21 +11,21 @@
 </template>
 
 <script>
-  import Header from "./components/layout/Header";
+  import AppHeader from "./components/layout/AppHeader";
   import axios from "axios";
 
   export default {
     name: "app",
 
     components: {
-      Header
+      AppHeader
     },
 
     data() {
       return {
         data: {
-          books: [],
-          booksInCart: []
+          books: Array,
+          booksInCart: Array
         }
       };
     },
@@ -40,16 +40,13 @@
 
     methods: {
       changeAmount(dataBook) {
-        if (dataBook.amount === 0)
+        if (dataBook.amount === 0){
           this.deleteBookFromCart(dataBook.id);
-
-        const id = dataBook.id;
+          return
+        }
         //обновляем данные в корзине
-        this.data.booksInCart.forEach(el => {
-          if (el.id === id) {
-            el.amount = dataBook.amount;
-          }
-        });
+        let bookInCart = this.data.booksInCart.find(book => book.id === dataBook.id);
+        bookInCart.amount = dataBook.amount;
         this.updateLocalStorage();
       },
 
@@ -92,7 +89,7 @@
     },
 
     created() {
-      //получаем данные с сервера
+      //получаем базу данных книг с сервера
       axios.get("/book_database")
         .then(res => {
           this.data.books = res.data;

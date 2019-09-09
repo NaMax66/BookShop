@@ -22,7 +22,9 @@
 <script>
   export default {
     name: "CartBook",
-    props: ["bookInCart"],
+    props: {
+      bookInCart: Object
+    },
     methods: {
       changeAmount(addAmount) {
         //отправляем новое кол-во в App. Все изменения данных происходят там

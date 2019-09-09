@@ -14,17 +14,16 @@
         </router-link>
       </div>
     </div>
-
   </header>
 </template>
 
 <script>
   export default {
     name: "Header",
-
-    props: ["totalAmountBooksInCart"]
+    props: {
+      totalAmountBooksInCart: Number
+    }
   };
-
 </script>
 
 <style>

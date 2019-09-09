@@ -22,18 +22,20 @@
     components: {
       CartBook
     },
-    props: ["data"],
+    props: {
+      data: Object
+    },
 
     computed: {
       totalPrice(){
         let totalSum = 0;
-        
+
         this.data.booksInCart.forEach(el => {
           totalSum += el.price * el.amount;
         });
 
-        //округляем до сотых долей
-        return Math.round(totalSum * 100)/100 + ' ₽';
+        //округляем до двух знаков после точки и разделяем разряды
+        return (Math.round(totalSum * 100)/100).toLocaleString('ru') + ' руб.';
       }
     },
 
