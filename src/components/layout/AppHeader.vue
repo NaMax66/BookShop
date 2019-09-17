@@ -21,7 +21,10 @@
   export default {
     name: "AppHeader",
     props: {
-      totalAmountBooksInCart: Number
+      totalAmountBooksInCart: {
+        type: Number,
+        default: 0
+      }
     }
   };
 </script>

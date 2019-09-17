@@ -1,10 +1,12 @@
 <template>
   <div class="container pt-5">
     <div class="row">
-      <div class="col-10" v-bind:key="bookInCart.id" v-for="bookInCart in data.booksInCart">
+      <div class="col-10">
         <!--передаем событие родителю-->
-        <CartBook v-bind:bookInCart="bookInCart" v-on:change-cart-book-amount="changeAmount"
-                  v-on:delete-book-from-cart="deleteBookFromCart"/>
+        <CartBook v-for="bookInCart in data.booksInCart"
+                  v-bind:bookInCart="bookInCart" v-on:change-cart-book-amount="changeAmount"
+                  v-on:delete-book-from-cart="deleteBookFromCart"
+                  v-bind:key="bookInCart.id"/>
       </div>
     </div>
     <div class="d-flex justify-content-between mb-4 mt-2">

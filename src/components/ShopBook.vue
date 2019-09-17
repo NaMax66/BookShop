@@ -1,18 +1,21 @@
 <template>
-  <div class="card-body pt-3">
-    <h5 class="card-title">{{ book.title }}</h5>
-    <div class="row">
-      <div class="p-0 col-4">
-        <img class="w-100" :src="require('../img/' + book.img)" :alt="book.title"/>
-      </div>
-      <div class="col-8">
-        <!--округляем представление стоимости книги-->
-        <p class="lead">Цена: <span class="font-weight-bold">{{ Math.round(book.price * 100) / 100 }}</span> руб.</p>
-        <b-button @click="addBookToCart" class="btn btn-info">В корзину</b-button>
+  <div class="col-lg-6">
+    <div class="card-body pt-3">
+      <h5 class="card-title">{{ book.title }}</h5>
+      <div class="row">
+        <div class="p-0 col-4">
+          <img class="w-100" :src="getImgPath" :alt="book.title"/>
+        </div>
+        <div class="col-8">
+          <!--округляем представление стоимости книги-->
+          <p class="lead">Цена: <span class="font-weight-bold">{{ Math.round(book.price * 100) / 100 }}</span> руб.</p>
+          <b-button @click="addBookToCart" class="btn btn-info">В корзину</b-button>
 
-        <!--добавляем всплывающее сообщение рядом с кнопкой "В корзину"-->
-        <b-toast class="mt-3" :id="'toast' + this.book.id"
-                 :title="`В корзине ${bookInCartAmount} шт.` " auto-hide-delay="5000" static>{{this.book.title}}</b-toast>
+          <!--добавляем всплывающее сообщение рядом с кнопкой "В корзину"-->
+          <b-toast class="mt-3" :id="'toast' + this.book.id"
+                   :title="`В корзине ${bookInCartAmount} шт.` " auto-hide-delay="5000" static>{{this.book.title}}
+          </b-toast>
+        </div>
       </div>
     </div>
   </div>
@@ -25,11 +28,18 @@
     props: {
       book: {
         type: Object,
-        default: {}
+        default() {
+          return {};
+        }
       },
       bookInCartAmount: {
         type: Number,
         default: 0
+      }
+    },
+    computed: {
+      getImgPath() {
+        return require('../img/' + this.book.img);
       }
     },
 
@@ -43,11 +53,11 @@
         //добавляем в корзину
         this.$emit("add-book-to-cart", newBook);
         //показываем сообщение о добавлении книги в корзину
-        this.makeToast()
+        this.makeToast();
       },
 
       makeToast() {
-        this.$bvToast.show(`toast${this.book.id}`)
+        this.$bvToast.show(`toast${this.book.id}`);
       }
     }
   };

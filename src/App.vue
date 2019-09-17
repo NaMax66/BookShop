@@ -87,6 +87,9 @@
       },
 
       deleteBookFromCart(id) {
+        if (this.data.booksInCart.length === 0)
+          return;
+
         this.data.booksInCart = this.data.booksInCart.filter(book => book.id !== id);
         this.updateLocalStorage();
       },
@@ -99,21 +102,39 @@
       },
 
       updateLocalStorage() {
+        if (this.data.booksInCart.length === 0)
+          return;
+
         localStorage.BookShopCart = JSON.stringify(this.data.booksInCart);
       }
     },
 
     created() {
+      this.data.books = [];
+
       //получаем базу данных книг с сервера
-      axios.get("https://cors-anywhere.herokuapp.com/https://www.book-shop.na4u.ru/book_database")
+      axios.get("/book_database")
         .then(res => {
           this.data.books = res.data;
         })
-        .catch(err => console.log(err));
+        // eslint-disable-next-line
+        .catch(err => console.log('App.created(): ' + err));
 
       //получаем данные из локального хранилища
       if (localStorage.BookShopCart) {
-        this.data.booksInCart = JSON.parse(localStorage.BookShopCart);
+        let parsedData = [];
+        try {
+          parsedData = JSON.parse(localStorage.BookShopCart);
+        } catch (e) {
+          console.log('App.vue. line 128: ' + e);
+        }
+        this.data.booksInCart = parsedData;
+      }
+
+      //Для корректной работы BookShopCart должен быть массивом. Если это не массив - мы очищаем корзину
+      if (!Array.isArray(this.data.booksInCart)){
+        this.data.booksInCart = [];
+        this.updateLocalStorage();
       }
     }
   };

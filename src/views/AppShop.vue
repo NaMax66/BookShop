@@ -1,14 +1,14 @@
 <template>
   <div class="container pt-5">
-    <div class="row">
-      <div class="col-lg-6" :key="book.id" v-for="book in data.books">
+    <!--если не вставить проверку на наличие книг - возникает ошибка проверки типов в компоненте ShopBook-->
+    <div v-if="data.books.length !== 0" class="row">
 
-        <!--передаем в компонент ShopBook объект из массива books и кол-во данной копии книги в корзине-->
-        <ShopBook :book="book"
-              :bookInCartAmount="getBookInCartAmount(book.id)"
-              @add-book-to-cart="addBookToCart"
-        />
-      </div>
+      <!--передаем в компонент ShopBook объект из массива books и кол-во данной копии книги в корзине-->
+      <ShopBook :key="book.id"
+                v-for="book in data.books"
+                :book="book"
+                :bookInCartAmount="getBookInCartAmount(book.id)"
+                @add-book-to-cart="addBookToCart"/>
     </div>
   </div>
 </template>
