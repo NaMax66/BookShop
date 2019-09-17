@@ -24,14 +24,23 @@
     data() {
       return {
         data: {
-          books: Array,
-          booksInCart: Array
+          books: {
+            type: Array,
+            default: []
+          },
+          booksInCart: {
+            type: Array,
+            default: []
+          }
         }
       };
     },
 
     computed: {
       totalAmountBooksInCart() {
+        if (!this.data.booksInCart.length)
+          return 0;
+
         return this.data.booksInCart.reduce((sum, bookInCart) => {
           return sum + bookInCart.amount;
         }, 0);
@@ -40,9 +49,9 @@
 
     methods: {
       changeAmount(dataBook) {
-        if (dataBook.amount === 0){
+        if (dataBook.amount === 0) {
           this.deleteBookFromCart(dataBook.id);
-          return
+          return;
         }
         //обновляем данные в корзине
         let bookInCart = this.data.booksInCart.find(book => book.id === dataBook.id);
@@ -51,6 +60,12 @@
       },
 
       addBookToCart(newBook) {
+        //если корзина пуста - добавляем новую книгу сразу
+        if (this.data.booksInCart.length === 0) {
+          this.data.booksInCart[0] = newBook;
+          return;
+        }
+
         //проверяем есть ли книга в корзине
         this.data.booksInCart.forEach(el => {
 
@@ -85,12 +100,12 @@
 
       updateLocalStorage() {
         localStorage.BookShopCart = JSON.stringify(this.data.booksInCart);
-      },
+      }
     },
 
     created() {
       //получаем базу данных книг с сервера
-      axios.get("/book_database")
+      axios.get("https://cors-anywhere.herokuapp.com/https://www.book-shop.na4u.ru/book_database")
         .then(res => {
           this.data.books = res.data;
         })

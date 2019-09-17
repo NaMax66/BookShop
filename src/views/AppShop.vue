@@ -17,7 +17,7 @@
   import ShopBook from "../components/ShopBook";
 
   export default {
-    name: "Shop",
+    name: "AppShop",
     components: {
       ShopBook: ShopBook
     },
@@ -30,6 +30,9 @@
       },
       getBookInCartAmount(id) {
         let amount = 0;
+        if (!this.data.booksInCart.length)
+          return 0;
+
         this.data.booksInCart.forEach(el => {
 
           if (el.id === id) {

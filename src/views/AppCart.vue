@@ -18,7 +18,7 @@
   import CartBook from "../components/CartBook";
 
   export default {
-    name: "Cart",
+    name: "AppCart",
     components: {
       CartBook
     },
@@ -29,6 +29,8 @@
     computed: {
       totalPrice(){
         let totalSum = 0;
+        if (!this.data.booksInCart.length)
+          return 0;
 
         this.data.booksInCart.forEach(el => {
           totalSum += el.price * el.amount;

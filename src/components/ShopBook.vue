@@ -20,11 +20,17 @@
 
 <script>
   export default {
-    name: "Book",
+    name: "ShopBook",
 
     props: {
-      book: Object,
-      bookInCartAmount: Number
+      book: {
+        type: Object,
+        default: {}
+      },
+      bookInCartAmount: {
+        type: Number,
+        default: 0
+      }
     },
 
     methods: {
