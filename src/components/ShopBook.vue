@@ -8,7 +8,8 @@
         </div>
         <div class="col-8">
           <!--округляем представление стоимости книги-->
-          <p class="lead">Цена: <span class="font-weight-bold">{{ Math.round(book.price * 100) / 100 }}</span> руб.</p>
+          <p class="lead">Цена: <span class="font-weight-bold">{{ Math.round(book.price * 100) / 100 }}</span> руб.
+          </p>
           <b-button @click="addBookToCart" class="btn btn-info">В корзину</b-button>
 
           <!--добавляем всплывающее сообщение рядом с кнопкой "В корзину"-->
@@ -39,7 +40,7 @@
     },
     computed: {
       getImgPath() {
-        return require('../img/' + this.book.img);
+        return require("../img/" + this.book.img);
       }
     },
 
@@ -63,3 +64,6 @@
   };
 </script>
 
+<style>
+
+</style>

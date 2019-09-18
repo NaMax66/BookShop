@@ -1,27 +1,37 @@
 <template>
-  <div class="card-body">
-    <div class="row">
-      <div class="col-2 p-0">
-        <img class="w-100" :src="require('../img/' + bookInCart.img)" :alt="bookInCart.title"/>
-      </div>
-      <p class="card-title col-6">{{bookInCart.title}}</p>
-      <div class="col-4 text-right">
-        <div class="btn-group mr-2 mt-2" role="group" aria-label="Basic example">
-          <button @click="changeAmount(-1)" type="button" class="btn btn-secondary"> -</button>
-          <!--добавить динамическое обновление из корзины-->
-          <span class="btn disabled">  {{bookInCart.amount}}  </span>
-          <button @click="changeAmount(1)" type="button" class="btn btn-secondary"> +</button>
+  <transition name="shop-book-fade">
+    <div class="card-body" v-if="show">
+      <div class="row">
+        <div class="col-2 p-0">
+          <img class="w-100" :src="require('../img/' + bookInCart.img)" :alt="bookInCart.title"/>
         </div>
-        <!--передаем событие для удаления книги из корзины вместе с id в App.vue-->
-        <button @click="$emit('delete-book-from-cart', bookInCart.id)" class="btn btn-warning mt-2 mr-1">Убрать</button>
+        <p class="card-title col-6">{{bookInCart.title}}</p>
+        <div class="col-4 text-right">
+          <div class="btn-group mr-2 mt-2" role="group" aria-label="Basic example">
+            <button @click="changeAmount(-1)" type="button" class="btn btn-secondary"> -</button>
+            <!--добавить динамическое обновление из корзины-->
+            <span class="btn disabled">  {{bookInCart.amount}}  </span>
+            <button @click="changeAmount(1)" type="button" class="btn btn-secondary"> +</button>
+          </div>
+          <!--передаем событие для удаления книги из корзины вместе с id в App.vue-->
+          <button @click="deleteElement"
+                  class="btn btn-warning mt-2 mr-1">Убрать
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  </transition>
+
 </template>
 
 <script>
   export default {
     name: "CartBook",
+    data() {
+      return {
+        show: true
+      };
+    },
     props: {
       bookInCart: Object
     },
@@ -32,8 +42,21 @@
           amount: this.bookInCart.amount + addAmount,
           id: this.bookInCart.id
         });
+      },
+      deleteElement() {
+        this.$emit("delete-book-from-cart", this.bookInCart.id);
+        this.show = !this.show;
       }
     }
   };
 </script>
 
+<style>
+  .shop-book-fade-enter-active, .shop-book-fade-leave-active {
+    transition: opacity .2s ease;
+  }
+
+  .shop-book-fade-enter, .shop-book-fade-leave-to {
+    opacity: 0;
+  }
+</style>

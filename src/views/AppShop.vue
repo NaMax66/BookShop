@@ -30,15 +30,17 @@
       },
       getBookInCartAmount(id) {
         let amount = 0;
+
         if (!this.data.booksInCart.length)
           return 0;
 
-        this.data.booksInCart.forEach(el => {
-
-          if (el.id === id) {
-            amount = el.amount;
-          }
-        });
+        else {
+          this.data.booksInCart.forEach(el => {
+            if (el.id === id) {
+              amount = el.amount;
+            }
+          });
+        }
         return amount;
       }
     }

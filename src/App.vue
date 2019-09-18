@@ -1,12 +1,14 @@
-<template>
+<template >
   <div id="app" class="container mt-5">
     <AppHeader :totalAmountBooksInCart="totalAmountBooksInCart"/>
-    <router-view :data="data"
-                 @add-book-to-cart="addBookToCart"
-                 @change-cart-book-amount="changeAmount"
-                 @delete-book-from-cart="deleteBookFromCart"
-                 @clear-cart="clearCart"
-    />
+    <transition name="component-fade" mode="out-in">
+      <router-view :data="data"
+                   @add-book-to-cart="addBookToCart"
+                   @change-cart-book-amount="changeAmount"
+                   @delete-book-from-cart="deleteBookFromCart"
+                   @clear-cart="clearCart"
+      />
+    </transition>
   </div>
 </template>
 
@@ -63,21 +65,19 @@
         //если корзина пуста - добавляем новую книгу сразу
         if (this.data.booksInCart.length === 0) {
           this.data.booksInCart[0] = newBook;
-          return;
+
+        } else {
+          //проверяем есть ли книга в корзине
+          this.data.booksInCart.forEach(el => {
+
+            //смотрим все книги в корзине и если есть с существующим id - обновляем кол-во
+            if (el.id === newBook.id) {
+              newBook.amount = el.amount + 1;
+            }
+          });
         }
-
-        //проверяем есть ли книга в корзине
-        this.data.booksInCart.forEach(el => {
-
-          //смотрим все книги в корзине и если есть с существующим id - обновляем кол-во
-          if (el.id === newBook.id) {
-            newBook.amount = el.amount + 1;
-
-            //удаляем книгу со старым кол-вом
-            this.deleteBookFromCart(newBook.id);
-            this.updateLocalStorage();
-          }
-        });
+        //удаляем книгу со старым кол-вом
+        this.deleteBookFromCart(newBook.id);
 
         //Добавляем новую книгу в корзину
         this.data.booksInCart = [newBook, ...this.data.booksInCart];
@@ -118,21 +118,22 @@
           this.data.books = res.data;
         })
         // eslint-disable-next-line
-        .catch(err => console.log('App.created(): ' + err));
+        .catch(err => console.log("App.created(): " + err));
 
       //получаем данные из локального хранилища
       if (localStorage.BookShopCart) {
         let parsedData = [];
+
         try {
           parsedData = JSON.parse(localStorage.BookShopCart);
         } catch (e) {
-          console.log('App.vue. line 128: ' + e);
+          console.log("App.vue. line 128: " + e);
         }
         this.data.booksInCart = parsedData;
       }
 
       //Для корректной работы BookShopCart должен быть массивом. Если это не массив - мы очищаем корзину
-      if (!Array.isArray(this.data.booksInCart)){
+      if (!Array.isArray(this.data.booksInCart)) {
         this.data.booksInCart = [];
         this.updateLocalStorage();
       }
@@ -147,5 +148,14 @@
       font-size: 75%;
     }
   }
+
+  .component-fade-enter-active, .component-fade-leave-active {
+    transition: opacity .2s ease;
+  }
+
+  .component-fade-enter, .component-fade-leave-to {
+    opacity: 0;
+  }
+
 </style>
 
