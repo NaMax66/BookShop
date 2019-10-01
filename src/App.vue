@@ -1,8 +1,8 @@
-<template >
+<template>
   <div id="app" class="container mt-5">
     <AppHeader :totalAmountBooksInCart="totalAmountBooksInCart"/>
     <transition name="component-fade" mode="out-in">
-      <router-view :data="data"
+      <router-view
                    @add-book-to-cart="addBookToCart"
                    @change-cart-book-amount="changeAmount"
                    @delete-book-from-cart="deleteBookFromCart"
@@ -23,29 +23,9 @@
       AppHeader
     },
 
-    data() {
-      return {
-        data: {
-          books: {
-            type: Array,
-            default: []
-          },
-          booksInCart: {
-            type: Array,
-            default: []
-          }
-        }
-      };
-    },
-
     computed: {
       totalAmountBooksInCart() {
-        if (!this.data.booksInCart.length)
-          return 0;
-
-        return this.data.booksInCart.reduce((sum, bookInCart) => {
-          return sum + bookInCart.amount;
-        }, 0);
+        return this.$store.getters.totalAmountBooksInCart;
       }
     },
 
@@ -110,12 +90,15 @@
     },
 
     created() {
-      this.data.books = [];
+      //get user language
+      let userLang = navigator.language || navigator.userLanguage;
+      if (userLang === "ru-RU")
+        this.$store.commit("changeLang", "ru");
 
       //получаем базу данных книг с сервера
-      axios.get("/book_database")
+      axios.get("https://cors-anywhere.herokuapp.com/https://www.book-shop.na4u.ru/book_database")
         .then(res => {
-          this.data.books = res.data;
+          this.$store.commit("setBooks", res.data);
         })
         // eslint-disable-next-line
         .catch(err => console.log("App.created(): " + err));
@@ -129,16 +112,16 @@
         } catch (e) {
           console.log("App.vue. line 128: " + e);
         }
-        this.data.booksInCart = parsedData;
+        this.$store.commit("setBookShopCart", parsedData);
       }
 
       //Для корректной работы BookShopCart должен быть массивом. Если это не массив - мы очищаем корзину
-      if (!Array.isArray(this.data.booksInCart)) {
-        this.data.booksInCart = [];
+      if (!Array.isArray(this.$store.getters.getBooksInCart)) {
+        this.$store.commit("booksInCart", []);
         this.updateLocalStorage();
       }
     }
-  };
+  }
 </script>
 
 <style>

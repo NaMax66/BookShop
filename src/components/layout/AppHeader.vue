@@ -5,12 +5,14 @@
         <h1 class="navbar-brand text-white">BookShop</h1>
       </router-link>
       <div class="navbar">
-        <router-link class="nav-item nav-link text-white font-weight-bold" to="/">Магазин</router-link>
+        <router-link class="nav-item nav-link text-white font-weight-bold" to="/">{{strings.SHOP[language]}}</router-link>
+        <router-link class="nav-item nav-link text-white font-weight-bold" to="/login">{{strings.LOGIN[language]}}</router-link>
+        <!--change language-->
 
         <!--Добавляем бордер на кнопку Корзина, если общее кол-во не 0-->
         <router-link class="nav-item nav-link text-white font-weight-bold btn"
                      :class="{'border-light':totalAmountBooksInCart}" to="cart">
-          Корзина <span class=" badge badge-light">{{totalAmountBooksInCart}}</span>
+          {{strings.CART[language]}} <span class=" badge badge-light">{{totalAmountBooksInCart}}</span>
         </router-link>
       </div>
     </div>
@@ -18,12 +20,20 @@
 </template>
 
 <script>
+  import {strings} from '../../strings'
   export default {
     name: "AppHeader",
-    props: {
-      totalAmountBooksInCart: {
-        type: Number,
-        default: 0
+
+    //todo: make btn on the main screen - change language
+    computed: {
+      strings() {
+        return strings;
+      },
+      language() {
+        return this.$store.getters.language;
+      },
+      totalAmountBooksInCart() {
+        return this.$store.getters.totalAmountBooksInCart;
       }
     }
   };

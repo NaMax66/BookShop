@@ -10,7 +10,7 @@
           <!--округляем представление стоимости книги-->
           <p class="lead">Цена: <span class="font-weight-bold">{{ Math.round(book.price * 100) / 100 }}</span> руб.
           </p>
-          <b-button @click="addBookToCart" class="btn btn-info">В корзину</b-button>
+          <b-button @click="addBookToCart" class="btn btn-info">{{strings.ADD_TO_CART[language]}}</b-button>
 
           <!--добавляем всплывающее сообщение рядом с кнопкой "В корзину"-->
           <b-toast class="mt-3" :id="'toast' + this.book.id"
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+  import {strings} from '../strings'
   export default {
     name: "ShopBook",
 
@@ -41,7 +42,15 @@
     computed: {
       getImgPath() {
         return require("../img/" + this.book.img);
+      },
+
+      strings() {
+        return strings;
+      },
+      language() {
+        return this.$store.getters.language;
       }
+
     },
 
     methods: {
