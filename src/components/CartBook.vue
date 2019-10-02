@@ -9,12 +9,10 @@
         <div class="col-4 text-right">
           <div class="btn-group mr-2 mt-2" role="group" aria-label="Basic example">
             <button @click="changeAmount(-1)" type="button" class="btn btn-secondary"> -</button>
-            <!--добавить динамическое обновление из корзины-->
             <span class="btn disabled">  {{bookInCart.amount}}  </span>
             <button @click="changeAmount(1)" type="button" class="btn btn-secondary"> +</button>
           </div>
-          <!--передаем событие для удаления книги из корзины вместе с id в App.vue-->
-          <button @click="deleteElement"
+          <button @click="deleteBookFromCart"
                   class="btn btn-warning mt-2 mr-1">Убрать
           </button>
         </div>
@@ -32,19 +30,17 @@
         show: true
       };
     },
-    props: {
-      bookInCart: Object
-    },
+    props: ['bookInCart'],
+
     methods: {
       changeAmount(addAmount) {
-        //отправляем новое кол-во в App. Все изменения данных происходят там
-        this.$emit("change-cart-book-amount", {
+        this.$store.dispatch("changeAmount", {
           amount: this.bookInCart.amount + addAmount,
           id: this.bookInCart.id
         });
       },
-      deleteElement() {
-        this.$emit("delete-book-from-cart", this.bookInCart.id);
+      deleteBookFromCart() {
+        this.$store.dispatch("deleteBookFromCart", this.bookInCart.id);
         this.show = !this.show;
       }
     }

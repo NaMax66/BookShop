@@ -5,13 +5,17 @@
         <h1 class="navbar-brand text-white">BookShop</h1>
       </router-link>
       <div class="navbar">
-        <router-link class="nav-item nav-link text-white font-weight-bold" to="/">{{strings.SHOP[language]}}</router-link>
-        <router-link class="nav-item nav-link text-white font-weight-bold" to="/login">{{strings.LOGIN[language]}}</router-link>
-        <!--change language-->
+        <router-link class="nav-item nav-link text-white font-weight-bold"
+                     to="/"
+        >{{strings.SHOP[language]}}</router-link>
+        <router-link class="nav-item nav-link text-white font-weight-bold"
+                     to="/login"
+        >{{strings.LOGIN[language]}}</router-link>
 
-        <!--Добавляем бордер на кнопку Корзина, если общее кол-во не 0-->
+        <!--If we have some books in our cart we add a border around the button-->
         <router-link class="nav-item nav-link text-white font-weight-bold btn"
-                     :class="{'border-light':totalAmountBooksInCart}" to="cart">
+                     :class="{'border-light':totalAmountBooksInCart}" to="cart"
+        >
           {{strings.CART[language]}} <span class=" badge badge-light">{{totalAmountBooksInCart}}</span>
         </router-link>
       </div>

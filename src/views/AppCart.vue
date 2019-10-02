@@ -3,18 +3,17 @@
 
     <div class="row">
       <div class="col-10">
-        <!--передаем событие родителю-->
-
         <CartBook v-for="bookInCart in booksInCart"
-                  v-bind:bookInCart="bookInCart" v-on:change-cart-book-amount="changeAmount"
-                  v-on:delete-book-from-cart="deleteBookFromCart"
-                  v-bind:key="bookInCart.id"/>
+                  :bookInCart="bookInCart"
+                  :key="bookInCart.id"
+        />
       </div>
     </div>
 
+    <!--footer menu-->
     <div class="d-flex justify-content-between mb-4 mt-2">
-      <button @click="$emit('clear-cart')" class="btn btn-danger">Удалить всё</button>
-      <h3 class="pl-2">Общая сумма заказа: {{totalPrice}}</h3>
+      <button @click="clearCart" class="btn btn-danger">Удалить всё</button>
+      <h3 class="pl-2">Общая сумма заказа: {{totalPrice | getNicePrice}}</h3>
     </div>
   </div>
 </template>
@@ -29,32 +28,24 @@
     },
 
     computed: {
-
       booksInCart() {
         return this.$store.getters.getBooksInCart;
       },
 
       totalPrice() {
-        let totalSum = 0;
-        /*if (!this.data.booksInCart.length)
-          totalSum = 0;
-        else {
-          this.data.booksInCart.forEach(el => {
-            totalSum += el.price * el.amount;
-          });
-        }*/
-        //округляем до двух знаков после точки и разделяем разряды
-        return (Math.round(totalSum * 100) / 100).toLocaleString("ru") + " руб.";
+        return this.$store.getters.totalPrice;
+      }
+    },
+
+    filters: {
+      getNicePrice(value) {
+        return (Math.round(value * 100) / 100).toLocaleString("ru") + " руб.";
       }
     },
 
     methods: {
-      changeAmount(numId) {
-        this.$emit("change-cart-book-amount", numId);
-      },
-
-      deleteBookFromCart(id) {
-        this.$emit("delete-book-from-cart", id);
+      clearCart(){
+        this.$store.dispatch('clearCart');
       }
     }
   };

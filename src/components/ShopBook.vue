@@ -8,7 +8,7 @@
         </div>
         <div class="col-8">
           <!--округляем представление стоимости книги-->
-          <p class="lead">Цена: <span class="font-weight-bold">{{ Math.round(book.price * 100) / 100 }}</span> руб.
+          <p class="lead">Цена: <span class="font-weight-bold">{{ book.price | getNicePriceLook  }}</span> руб.
           </p>
           <b-button @click="addBookToCart" class="btn btn-info">{{strings.ADD_TO_CART[language]}}</b-button>
 
@@ -23,25 +23,22 @@
 </template>
 
 <script>
-  import {strings} from '../strings'
+  import { strings } from "../strings";
+
   export default {
     name: "ShopBook",
 
-    props: {
-      book: {
-        type: Object,
-        default() {
-          return {};
-        }
-      },
-      bookInCartAmount: {
-        type: Number,
-        default: 0
-      }
-    },
+    props: ['book'],
     computed: {
+
+      bookInCartAmount() {
+        return this.$store.getters.bookInCartAmount(this.book.id);
+      },
+
       getImgPath() {
-        return require("../img/" + this.book.img);
+        if (this.book.img) {
+          return  require("../img/" + this.book.img);
+        }
       },
 
       strings() {
@@ -53,16 +50,17 @@
 
     },
 
+    filters: {
+      getNicePriceLook(price){
+        return Math.round(price * 100) / 100
+      }
+    },
+
     methods: {
       addBookToCart() {
-        //создаем новый объект для корзины
-        const newBook = Object.assign({}, this.book);
-
-        //проверка на количество в корзине делается в методе addBookToCart в корневом элементе
-        newBook.amount = 1;
-        //добавляем в корзину
-        this.$emit("add-book-to-cart", newBook);
-        //показываем сообщение о добавлении книги в корзину
+        //add to cart
+        this.$store.dispatch("addBookToCart", this.book);
+        //show info message
         this.makeToast();
       },
 
