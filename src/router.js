@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import AppShop from './views/AppShop.vue'
 import AppCart from "./views/AppCart"
 import AppLogIn from "./components/AppLogIn";
+const AppReviews = () => import('./views/AppReviews');
 
 Vue.use(Router);
 
@@ -22,6 +23,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: AppLogIn
+    },
+    {
+      path: '/review',
+      name: 'review',
+      component: AppReviews
     }
   ],
   mode: 'history'

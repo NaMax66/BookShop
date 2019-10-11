@@ -33,10 +33,11 @@
         this.$store.commit("changeLang", "ru");
 
       //get books database from a server
-      axios.get("https://cors-anywhere.herokuapp.com/https://www.book-shop.na4u.ru/book_database")
+      axios.get("/book_database.json")
         .then(res => {
           this.$store.commit("setBooks", res.data);
         })
+        // eslint-disable-next-line no-console
         .catch(err => console.log("App.vue 40: " + err));
 
       //get data from local storage
@@ -56,11 +57,7 @@
 
 <style>
   /*уменьшаем размер шрифта с 16 до 12px для маленьких экранов*/
-  @media (max-width: 768px) {
-    html {
-      font-size: 75%;
-    }
-  }
+
 
   .component-fade-enter-active, .component-fade-leave-active {
     transition: opacity .2s ease;
