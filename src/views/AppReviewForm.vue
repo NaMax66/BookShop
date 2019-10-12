@@ -9,9 +9,9 @@
           <h3 class="review__header">Оценить</h3>
         </div>
 
+        <!--добавляем красный бордер только если пользователь нажал подтверждение, а оценку не поставил-->
         <div class="review__stars"
-             @mouseout="isScoreValid()"
-             :class="{'red__border': !isScoreValid && isFormTouched}"
+             :class="{'red__border': isConfirmed && !isScoreValid() }"
         >
           <span v-for="index in 5"
                 class="review__star__container"
@@ -34,24 +34,29 @@
           <!--сдлал лэйбл для программ чтения с экрана-->
           <label for="name">Ваше имя</label>
           <input id="name"
-                 @blur="nickIsValid()"
-                 :class="{'red__border': !isNickValid && isFormTouched}"
+                 :class="{'red__border': isConfirmed && !isNickValid() }"
                  class="review__form__name"
                  v-model="nickName"
                  type="text"
                  placeholder="Укажите ваш никнейм"
+                 required
           >
           <label for="text">Расскажите, что можно улучшить?</label>
           <div class="review__form__text__wrapper">
             <textarea id="text"
+                      :class="{'red__border': isConfirmed && !isTextValid() }"
                       class="review__form__text"
                       v-model="text"
                       type="text"
                       placeholder="Расскажите, что можно улучшить?"
+                      required
             ></textarea>
             <span class="review__form__text__hint"
                   v-if="text.length < 20"
             >Минимум 20 символов</span>
+            <span class="review__form__text__hint"
+                  v-if="text.length > 1000"
+            >Максимум 1000 символов</span>
 
           </div>
 
@@ -74,11 +79,10 @@
         nickName: "",
         score: 0,
         text: "",
-        isNickValid: false,
-        isScoreValid: false,
-        isTextValid: false,
-        isFormTouched: false
-
+        isConfirmed: false,
+        scoreIsValid: false,
+        nickIsValid: false,
+        textIsValid: false
       };
     },
     computed: {
@@ -92,28 +96,34 @@
       }
     },
     methods: {
-      scoreIsValid() {
-        this.isFormTouched = true;
-        if (this.score < 1) {
-          this.isScoreValid = false;
+      isScoreValid() {
+        if (this.score < 1){
+          this.scoreIsValid = false;
+          return false;
         } else {
-          this.isScoreValid = true;
-        }
-
-      },
-
-      nickIsValid() {
-        //чтобы красный контур не появлялся сразу при открытии
-        this.isFormTouched = true;
-        if (this.nickName.length >= 2) {
-          this.isNickValid = true;
-        } else {
-          this.isNickValid = false;
+          this.scoreIsValid = true;
+          return true;
         }
       },
 
-      textIsValid() {
+      isNickValid() {
+        if (this.nickName.length >= 2){
+          this.nickIsValid = true;
+          return true;
+        } else {
+          this.nickIsValid = false;
+          return false;
+        }
+      },
 
+      isTextValid() {
+         if(this.text.length < 20 || this.text.length > 1000) {
+           this.textIsValid = false;
+           return false;
+         } else {
+           this.textIsValid = true;
+           return true;
+         }
       },
 
       setRating(index) {
@@ -125,8 +135,13 @@
       },
 
       confirmData() {
-        /*если что-то не заполнено - ничего не добавляем*/
-        if (!this.isNickValid || !this.isScoreValid || !this.isScoreValid ) {
+        this.isConfirmed = true;
+
+        this.isScoreValid();
+        this.isNickValid();
+        this.isTextValid();
+
+        if (!this.scoreIsValid || !this.nickIsValid || !this.textIsValid) {
           return;
         }
 
@@ -142,6 +157,10 @@
         this.nickName = "";
         this.score = 0;
         this.text = "";
+        this.isConfirmed = false;
+        this.scoreIsValid = false;
+        this.textIsValid = false;
+        this.nickIsValid = false;
 
         this.closeModal();
         this.$emit("openThanks");
@@ -151,6 +170,10 @@
 </script>
 
 <style scoped lang="scss">
+  .red__border {
+    border: 2px solid red !important;
+  }
+
   .modal-mask {
     margin-top: 3.4rem;
 
@@ -257,9 +280,8 @@
             border-radius: 8px;
             height: 3rem;
           }
-          .red__border {
-            border: 2px solid red;
-          }
+
+
 
           .review__form__text__wrapper {
             margin-top: 1rem;
