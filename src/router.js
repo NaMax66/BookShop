@@ -4,6 +4,7 @@ import AppShop from './views/AppShop.vue'
 import AppCart from "./views/AppCart"
 import AppLogIn from "./components/AppLogIn";
 const AppReviews = () => import('./views/AppReviews');
+const AppAdmin = () => import('./views/AppAdmin');
 
 Vue.use(Router);
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/review',
       name: 'review',
       component: AppReviews
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: AppAdmin
     }
   ],
   mode: 'history'

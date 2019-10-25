@@ -12,7 +12,9 @@
 
     <!--footer menu-->
     <div class="d-flex justify-content-between mb-4 mt-5">
-      <button @click="clearCart" class="btn btn-danger">Удалить всё</button>
+      <button @click="clearCart" class="btn btn-danger"
+              :class="{'disabled': false}"
+      >Удалить всё</button>
       <h3 class="total_price ml-2"
       >Общая сумма заказа: {{totalPrice | getNicePrice}}</h3>
     </div>
